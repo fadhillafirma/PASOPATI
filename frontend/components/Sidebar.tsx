@@ -3,7 +3,7 @@
  * Sidebar — Panel informasi dan hasil optimasi
  */
 
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import type { OptimizeResult } from "./MapView";
 import ConvergenceChart from "./ConvergenceChart";
 
@@ -34,12 +34,12 @@ export default function Sidebar({
   loading: boolean;
   error: string | null;
   layers: { l1: boolean; l3: boolean; shelters: boolean; routes: boolean };
-  setLayers: (val: typeof layers | ((prev: typeof layers) => typeof layers)) => void;
+  setLayers: Dispatch<SetStateAction<{ l1: boolean; l3: boolean; shelters: boolean; routes: boolean }>>;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   function toggle(key: keyof typeof layers) {
-    setLayers((prev: typeof layers) => ({ ...prev, [key]: !prev[key] }));
+    setLayers((prev) => ({ ...prev, [key]: !prev[key] }));
   }
 
   return (
