@@ -25,6 +25,7 @@ export default function Home() {
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState<string | null>(null);
   const [userCoord, setUserCoord] = useState<[number, number] | null>(null);
+  const [jumlahOrang, setJumlahOrang] = useState(100);
 
   // Layer visibility state — bisa di-toggle dari Sidebar
   const [layers, setLayers] = useState({
@@ -45,7 +46,7 @@ export default function Home() {
       const res = await fetch("/api/optimize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lat, lon }),
+        body: JSON.stringify({ lat, lon, jumlah_orang: jumlahOrang }),
       });
 
       if (!res.ok) {
@@ -60,7 +61,7 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [jumlahOrang]);
 
   if (isLanding) {
     return <LandingPage onStart={() => setIsLanding(false)} />;
@@ -83,6 +84,8 @@ export default function Home() {
         error={error}
         layers={layers}
         setLayers={setLayers}
+        jumlahOrang={jumlahOrang}
+        setJumlahOrang={setJumlahOrang}
       />
     </main>
   );

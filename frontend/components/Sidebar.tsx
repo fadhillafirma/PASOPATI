@@ -29,12 +29,15 @@ function statusBadge(s: string) {
 export default function Sidebar({
   result, loading, error,
   layers, setLayers,
+  jumlahOrang, setJumlahOrang,
 }: {
   result: OptimizeResult | null;
   loading: boolean;
   error: string | null;
   layers: { l1: boolean; l3: boolean; shelters: boolean; routes: boolean };
   setLayers: Dispatch<SetStateAction<{ l1: boolean; l3: boolean; shelters: boolean; routes: boolean }>>;
+  jumlahOrang: number;
+  setJumlahOrang: Dispatch<SetStateAction<number>>;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -69,6 +72,22 @@ export default function Sidebar({
 
       {/* ── Body ────────────────────────────────────────────── */}
       <div className="sb-body">
+        {/* ── Input Kerumunan ─────────────────────────────────── */}
+        <div className="sec-title">Estimasi Jumlah Rombongan (Orang)</div>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "16px" }}>
+          <input 
+            type="number" 
+            min="1"
+            value={jumlahOrang} 
+            onChange={(e) => setJumlahOrang(Math.max(1, parseInt(e.target.value) || 1))}
+            style={{ 
+              width: "100%", padding: "8px 12px", 
+              borderRadius: "6px", border: "1px solid var(--border)",
+              backgroundColor: "var(--bg-card)", color: "var(--text-main)",
+              outline: "none", fontSize: "14px", fontFamily: "inherit"
+            }}
+          />
+        </div>
         {/* Panduan ML (Muncul saat diperbesar atau jika diinginkan) */}
         {isExpanded && (
           <div className="tutorial-section">
@@ -306,8 +325,8 @@ export default function Sidebar({
                         <span className="sc-detail-val">{statusBadge(s.status_ml)}</span>
                       </div>
                       <div className="sc-detail">
-                        <span className="sc-detail-label">Grup</span>
-                        <span className="sc-detail-val">{s.jumlah_grup}</span>
+                        <span className="sc-detail-label">Orang</span>
+                        <span className="sc-detail-val">{s.jumlah_orang}</span>
                       </div>
                       <div className="sc-detail">
                         <span className="sc-detail-label">Bobot</span>

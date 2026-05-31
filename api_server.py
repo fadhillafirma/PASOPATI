@@ -67,6 +67,7 @@ def _py(obj):
 class OptimizeRequest(BaseModel):
     lat: float
     lon: float
+    jumlah_orang: int = 100
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -182,6 +183,7 @@ async def optimize(req: OptimizeRequest):
         _state["lcc"],
         _state["s_map"],
         _state["grid"],
+        jumlah_orang=req.jumlah_orang,
     )
 
     G = _state["G"]
@@ -220,7 +222,7 @@ async def optimize(req: OptimizeRequest):
                 "nama": shelter["nama"],
                 "lat": float(shelter["lat"]),
                 "lon": float(shelter["lon"]),
-                "jumlah_grup": int(shelter["jumlah_grup"]),
+                "jumlah_orang": int(shelter["jumlah_orang"]),
                 "bobot_rute": _py(shelter["bobot_rute"]),
                 "jarak_meter": round(total_distance, 1),
                 "kapasitas_max": int(shelter["kapasitas_max"]),

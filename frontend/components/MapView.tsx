@@ -18,7 +18,7 @@ import L from "leaflet";
 export interface ShelterRoute {
   shelter_id: string; nama: string;
   lat: number; lon: number;
-  jumlah_grup: number; bobot_rute: number;
+  jumlah_orang: number; bobot_rute: number;
   jarak_meter: number; kapasitas_max: number;
   sisa_kapasitas: number;
   status_kapasitas: string; status_ml: string;
@@ -328,6 +328,7 @@ export default function MapView({
                 <Popup>
                   <strong>#{i + 1} {route.nama}</strong><br />
                   Jarak: {(route.jarak_meter / 1000).toFixed(2)} km<br />
+                  Dialokasikan: {route.jumlah_orang.toLocaleString("id-ID")} orang<br />
                   Sisa kapasitas: {route.sisa_kapasitas.toLocaleString("id-ID")}<br />
                   Status: {route.status_ml}
                 </Popup>

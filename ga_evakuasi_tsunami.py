@@ -182,7 +182,7 @@ def ml_layer2_risiko_jalan(G):
     km = KMeans(n_clusters=3, random_state=42, n_init="auto")
     labels = km.fit_predict(Xs)
     
-    sample_size = min(10000, len(Xs))
+    sample_size = min(2000, len(fitur))
     score_l2 = silhouette_score(Xs, labels, sample_size=sample_size, random_state=42)
     print(f"  [ML-L2] Silhouette Score (Sampled): {score_l2:.3f}")
 
@@ -219,7 +219,7 @@ def ml_layer3_kepadatan_area(G, lcc, n_clusters=4):
     km = KMeans(n_clusters=n_clusters, random_state=42, n_init="auto")
     labels = km.fit_predict(koordinat)
     
-    sample_size = min(10000, len(koordinat))
+    sample_size = min(2000, len(koordinat))
     score_l3 = silhouette_score(koordinat, labels, sample_size=sample_size, random_state=42)
     print(f"  [ML-L3] Silhouette Score (Sampled): {score_l3:.3f}")
 
@@ -376,7 +376,9 @@ def _fitness(krom, dist, s_map, kap_sisa, status_ml=None):
     return total
 
 
-def jalankan_ga(koordinat, df, km_l1, km_l3, km_l4, G, lcc, s_map, grid):
+def jalankan_ga(koordinat, df_shelter, km_l1, km_l3, km_l4, G, lcc, s_map, grid, jumlah_orang=100):
+    """Fungsi utama untuk dijalankan oleh API FastAPI."""
+    df = df_shelter.copy()
     lat, lon = koordinat
 
     # ── ML Layer 1: Prediksi zona pengguna ──────────────────────────────────
@@ -450,7 +452,7 @@ def jalankan_ga(koordinat, df, km_l1, km_l3, km_l4, G, lcc, s_map, grid):
                 baru.append(_mutasi(c2, ids))
         pop = baru
 
-    hasil = _susun_hasil(best_k, best_f, node_user, df_ok, s_map, dist, riwayat)
+    hasil = _susun_hasil(best_k, best_f, node_user, df_ok, s_map, dist, riwayat, jumlah_orang)
     hasil.update({
         "nama_zona": user_zona_name,
         "kepadatan": kepadatan_nama,
@@ -459,19 +461,30 @@ def jalankan_ga(koordinat, df, km_l1, km_l3, km_l4, G, lcc, s_map, grid):
     return hasil
 
 
-def _susun_hasil(krom, fit_val, node_user, df, s_map, dist, riwayat):
+def _susun_hasil(krom, fit_val, node_user, df, s_map, dist, riwayat, jumlah_orang):
     info    = df.set_index("id").to_dict("index")
     alokasi = {}
     for s in krom:
         alokasi[s] = alokasi.get(s, 0) + 1
+    
+    n_grup = len(krom)
     detail = []
-    for sid, jml in alokasi.items():
+    sisa_alokasi = jumlah_orang
+    alokasi_items = list(alokasi.items())
+    
+    for i, (sid, jml) in enumerate(alokasi_items):
+        if i == len(alokasi_items) - 1:
+            alokasi_orang = sisa_alokasi
+        else:
+            alokasi_orang = round(jumlah_orang * (jml / n_grup))
+            sisa_alokasi -= alokasi_orang
+            
         d    = info[sid]
-        sisa = d["kapasitas_max"] - jml
+        sisa = d["kapasitas_max"] - alokasi_orang
         detail.append({
             "shelter_id": sid, "nama": d["nama"],
             "lat": d["lat"], "lon": d["lon"],
-            "jumlah_grup": jml,
+            "jumlah_orang": alokasi_orang,
             "bobot_rute":  round(dist.get(s_map[sid], float("inf")), 2),
             "kapasitas_max": d["kapasitas_max"],
             "sisa_kapasitas": sisa,
