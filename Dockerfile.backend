@@ -1,19 +1,13 @@
 # Base image Python yang ringan
 FROM python:3.10-slim
-
 # Set working directory
 WORKDIR /app
-
 # Copy daftar dependensi Python
 COPY requirements.txt .
-
 # Install dependensi Python
 RUN pip install --no-cache-dir -r requirements.txt
-
 # Copy seluruh kode backend (file .py, geojson, tif, dll)
 COPY . .
-
 # Cloud Run memberikan variabel environment $PORT (default 8080). 
 # Kita jalankan uvicorn langsung pada port tersebut.
 CMD ["sh", "-c", "uvicorn api_server:app --host 0.0.0.0 --port ${PORT:-8080}"]
-
