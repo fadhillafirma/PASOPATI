@@ -1,14 +1,17 @@
 #!/bin/bash
 
-# Start FastAPI backend in the background
-# It will listen on 0.0.0.0:8000
+# 1. Jalankan FastAPI backend di background (Port 8000)
 python api_server.py &
 
-# Wait a moment to ensure backend is up (optional but good practice)
+# Wait a moment to ensure backend is up
 sleep 2
 
-# Navigate to frontend and start the Next.js production server
-# Cloud Run sets the $PORT environment variable automatically (default 8080)
+# 2. Masuk ke folder frontend
 cd frontend
+
+# Set URL Backend agar Next.js bisa berkomunikasi secara lokal di dalam container
 export BACKEND_URL="http://127.0.0.1:8000"
-npm start
+
+# 3. JALANKAN NEXT.JS DI PORT YANG DIMINTA GOOGLE CLOUD RUN
+# Kita gunakan exec agar proses Next.js menjadi proses utama yang dikunci oleh Cloud Run
+exec npm start -- -p ${PORT:-8080}
