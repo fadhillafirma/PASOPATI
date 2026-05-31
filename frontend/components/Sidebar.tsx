@@ -49,6 +49,7 @@ export default function Sidebar({
     <aside className={`sidebar ${isExpanded ? "expanded" : ""}`}>
       {/* Tombol Expand */}
       <button 
+        type="button"
         className="expand-btn" 
         onClick={() => setIsExpanded(!isExpanded)}
         title={isExpanded ? "Perkecil Panel" : "Perbesar Panel & Baca Panduan"}

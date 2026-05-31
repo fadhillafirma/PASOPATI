@@ -14,7 +14,7 @@ export default function LandingPage({ onStart }: { onStart: () => void }) {
           <p className="hero-desc">
             Aplikasi cerdas pencarian rute aman berbasis <strong>Machine Learning (4-Layer K-Means)</strong> dan <strong>Algoritma Genetika</strong> untuk meminimalkan risiko saat evakuasi darurat bencana.
           </p>
-          <button className="start-btn" onClick={onStart}>
+          <button type="button" className="start-btn" onClick={onStart}>
             Mulai Aplikasi
           </button>
         </div>

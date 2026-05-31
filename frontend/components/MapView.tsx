@@ -352,7 +352,7 @@ export default function MapView({
       )}
 
       {/* GPS Button */}
-      <button className="gps-btn" onClick={handleGPS} title="Gunakan lokasi saya">
+      <button type="button" className="gps-btn" onClick={handleGPS} title="Gunakan lokasi saya">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="7" />
           <line x1="12" y1="2" x2="12" y2="5" />
