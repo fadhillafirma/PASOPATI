@@ -7,12 +7,12 @@ export default function LandingPage({ onStart }: { onStart: () => void }) {
     <div className="landing-container">
       <div className="landing-content">
         <div className="hero-section">
-          <h1 className="hero-title">Sistem Evakuasi Tsunami</h1>
+          <h1 className="hero-title">Sistem Evakuasi Bencana</h1>
           <p className="hero-subtitle">
             Kota Padang, Sumatera Barat
           </p>
           <p className="hero-desc">
-            Aplikasi cerdas pencarian rute aman berbasis <strong>Machine Learning (4-Layer K-Means)</strong> dan <strong>Algoritma Genetika</strong> untuk meminimalkan risiko saat bencana tsunami.
+            Aplikasi cerdas pencarian rute aman berbasis <strong>Machine Learning (4-Layer K-Means)</strong> dan <strong>Algoritma Genetika</strong> untuk meminimalkan risiko saat evakuasi darurat bencana.
           </p>
           <button className="start-btn" onClick={onStart}>
             Mulai Aplikasi
