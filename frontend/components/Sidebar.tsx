@@ -34,7 +34,7 @@ export default function Sidebar({
   loading: boolean;
   error: string | null;
   layers: { l1: boolean; l3: boolean; shelters: boolean; routes: boolean };
-  setLayers: (l: typeof layers) => void;
+  setLayers: (val: typeof layers | ((prev: typeof layers) => typeof layers)) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
