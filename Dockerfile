@@ -25,7 +25,7 @@ COPY . .
 
 # Build the frontend
 WORKDIR /app/frontend
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 # Make the start script executable

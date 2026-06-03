@@ -1,0 +1,14 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.mypy_cache
+.next
+frontend/.next
+frontend/node_modules
+node_modules
+npm-debug.log*
+.dockerignore
