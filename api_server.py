@@ -3,7 +3,7 @@ FastAPI Backend — Sistem Evakuasi Tsunami Kota Padang
 Wraps the existing GA + 4-Layer K-Means model for web access.
 """
 
-import json, math, os, sys, time
+import json, math, os, sys, time, traceback
 import numpy as np
 import networkx as nx
 from fastapi import FastAPI
@@ -38,6 +38,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request, exc):
+    print("\n  [ERROR] Unhandled backend exception:")
+    traceback.print_exception(type(exc), exc, exc.__traceback__)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Terjadi error di backend.",
+            "detail": str(exc),
+            "path": str(request.url.path),
+        },
+    )
 
 # ── Global state (filled on startup) ────────────────────────────────────────
 _state: dict = {}
@@ -172,6 +186,14 @@ async def get_clusters():
 @app.post("/api/optimize")
 async def optimize(req: OptimizeRequest):
     t0 = time.time()
+    if not _state:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "error": "Backend belum siap. Tunggu proses inisialisasi selesai.",
+                "detail": "State model, graf, dan data shelter belum dimuat.",
+            },
+        )
 
     hasil = jalankan_ga(
         (req.lat, req.lon),

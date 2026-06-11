@@ -31,9 +31,8 @@ _KAP_DEFAULT = {
 PANTAI_LON = 100.37  # batas longitude pesisir
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # UTILITAS
-# ══════════════════════════════════════════════════════════════════════════════
 def _hav(lat1, lon1, lat2, lon2):
     R = 6_371_000
     p1, p2 = math.radians(lat1), math.radians(lat2)
@@ -69,9 +68,9 @@ class GridIndex:
         return best
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# DATA: MUAT SHELTER & GRAF
-# ══════════════════════════════════════════════════════════════════════════════
+
+# SINTAKS MUAT SHELTER & GRAF
+
 def muat_shelter(path=None):
     path = path or os.path.join(_DIR, "shelter_evakuasi_padang_clean.csv")
     raw  = pd.read_csv(path)
@@ -98,6 +97,7 @@ def bangun_graf(path=None):
     path = path or os.path.join(_DIR, "jaringan_jalan.geojson")
     with open(path, encoding="utf-8") as f:
         gj = json.load(f)
+        
     G = nx.Graph()
     for fitur in gj.get("features", []):
         geom = fitur.get("geometry", {})

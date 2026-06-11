@@ -337,16 +337,6 @@ export default function Sidebar({
                       </div>
                     </div>
 
-                    {/* Risk segments */}
-                    <div className="sc-risk">
-                      {Object.entries(s.risk_segments).map(([k, v]) => (
-                        v > 0 && (
-                          <span key={k} className={`sc-risk-tag risk-${k.toLowerCase()}`}>
-                            {k}: {v}
-                          </span>
-                        )
-                      ))}
-                    </div>
                   </div>
                 );
               })}

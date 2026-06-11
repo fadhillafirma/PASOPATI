@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
+import { BACKEND_API, backendUnavailable, readBackendJson } from "../_backend";
 
-export const dynamic = 'force-dynamic';
-const API = process.env.BACKEND_URL || "http://localhost:8080";
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const res = await fetch(`${API}/api/clusters`, { cache: 'no-store' });
-    const data = await res.json();
-    return NextResponse.json(data);
-  } catch {
-    return NextResponse.json({ error: "Backend tidak dapat dihubungi." }, { status: 503 });
+    const res = await fetch(`${BACKEND_API}/api/clusters`, { cache: "no-store" });
+    const data = await readBackendJson(res);
+    return NextResponse.json(data, { status: res.status });
+  } catch (error) {
+    return backendUnavailable("Backend tidak dapat dihubungi.", error);
   }
 }
